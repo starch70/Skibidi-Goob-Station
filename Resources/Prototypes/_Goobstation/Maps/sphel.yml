@@ -2,8 +2,8 @@
   id: Sphel
   mapName: 'Sphel'
   mapPath: /Maps/_Goobstation/sphel.yml
-  minPlayers: 50
-  maxPlayers: 85
+  minPlayers: 45
+  maxPlayers: 95
   stations:
     Sphel:
       stationProto: StandardNanotrasenStation
@@ -15,6 +15,8 @@
             prefixCreator: '14'
         - type: StationEmergencyShuttle
           emergencyShuttlePath: /Maps/_Goobstation/Shuttles/emergency_sphel.yml
+        - type: StationCargoShuttle
+          path: /Maps/Shuttles/cargo_fland.yml
         - type: StationJobs
           availableJobs:
             #command
@@ -33,35 +35,35 @@
             #engineering
             ChiefEngineer: [ 1, 1 ]
             AtmosphericTechnician: [ 3, 3 ]
-            StationEngineer: [ 4, 4 ]
-            TechnicalAssistant: [ 4, 4 ]
+            StationEngineer: [ 7, 7 ]
+            TechnicalAssistant: [ 5, 5 ]
             #medical
             ChiefMedicalOfficer: [ 1, 1 ]
             Chemist: [ 2, 2 ]
-            MedicalDoctor: [ 3, 3 ]
-            Paramedic: [ 1, 1 ]
-            MedicalIntern: [ 4, 4 ]
+            MedicalDoctor: [ 3, 5 ]
+            Paramedic: [ 2, 2 ]
+            MedicalIntern: [ 4, 6 ]
             #science
             ResearchDirector: [ 1, 1 ]
-            Scientist: [ 5, 5 ]
-            ResearchAssistant: [ 4, 4 ]
+            Scientist: [ 5, 7 ]
+            ResearchAssistant: [ 4, 6 ]
             #security
             HeadOfSecurity: [ 1, 1 ]
             Warden: [ 1, 1 ]
-            SecurityOfficer: [ 4, 4 ]
+            SecurityOfficer: [ 6, 6 ]
             Detective: [ 1, 1 ]
             SecurityCadet: [ 4, 4 ]
-            Lawyer: [ 2, 2 ]
+            Lawyer: [ 1, 2 ]
             #supply
             Quartermaster: [ 1, 1 ]
-            SalvageSpecialist: [ 3, 3 ]
-            CargoTechnician: [ 3, 3 ]
+            SalvageSpecialist: [ 4, 4 ]
+            CargoTechnician: [ -1, -1 ]
             #civilian
             Passenger: [ -1, -1 ]
             Clown: [ 1, 1 ]
             Mime: [ 1, 1 ]
             Musician: [ 1, 1 ]
-            Reporter: [ 2, 2 ]
+            Reporter: [ 1, 2 ]
             #silicon
             StationAi: [ 1, 1 ]
-            Borg: [ 2, 2 ]
+            Borg: [ 2, 4 ]
