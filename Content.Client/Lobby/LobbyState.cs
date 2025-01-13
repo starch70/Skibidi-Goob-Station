@@ -11,7 +11,7 @@ using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
-using Content.Client._Goobstation.ServerCurrency; // Goobstation - Goob Coin
+using Content.Client._Goobstation.ServerCurrency;
 
 namespace Content.Client.Lobby
 {
@@ -24,8 +24,9 @@ namespace Content.Client.Lobby
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
         [Dependency] private readonly IGameTiming _gameTiming = default!;
         [Dependency] private readonly IVoteManager _voteManager = default!;
-        [Dependency] private readonly ServerCurrencySystem _serverCur = default!; // Goobstation - Goob Coin
+        [Dependency] private readonly ServerCurrencySystem _serverCur = default!; // Goobstation - server currency
 
+        private ISawmill _sawmill = default!; // Goobstation
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
 
@@ -45,6 +46,7 @@ namespace Content.Client.Lobby
             _gameTicker = _entityManager.System<ClientGameTicker>();
             _contentAudioSystem = _entityManager.System<ContentAudioSystem>();
             _contentAudioSystem.LobbySoundtrackChanged += UpdateLobbySoundtrackInfo;
+            _sawmill = Logger.GetSawmill("lobby");
 
             chatController.SetMainChat(true);
 
@@ -62,8 +64,6 @@ namespace Content.Client.Lobby
             _gameTicker.LobbyLateJoinStatusUpdated += LobbyLateJoinStatusUpdated;
 
             _serverCur.BalanceChange += UpdatePlayerBalance; // Goobstation - Goob Coin
-
-            Lobby!.FUCKINGMARIAH.Texture = _resourceCache.GetResource<TextureResource>("/Textures/_Goobstation/Interface/Misc/FUCKINGMARIAH.png");
         }
 
         protected override void Shutdown()
@@ -122,7 +122,7 @@ namespace Content.Client.Lobby
                 return;
             }
 
-            Lobby!.StationTime.Text =  Loc.GetString("lobby-state-player-status-round-not-started");
+            Lobby!.StationTime.Text = Loc.GetString("lobby-state-player-status-round-not-started");
             string text;
 
             if (_gameTicker.Paused)
@@ -141,6 +141,10 @@ namespace Content.Client.Lobby
                 if (seconds < 0)
                 {
                     text = Loc.GetString(seconds < -5 ? "lobby-state-right-now-question" : "lobby-state-right-now-confirmation");
+                }
+                else if (difference.TotalHours >= 1)
+                {
+                    text = $"{Math.Floor(difference.TotalHours)}:{difference.Minutes:D2}:{difference.Seconds:D2}";
                 }
                 else
                 {
@@ -218,17 +222,35 @@ namespace Content.Client.Lobby
             }
         }
 
+        // Goobstation - heavily modified to add credits for lobby backgrounds
         private void UpdateLobbyBackground()
         {
             if (_gameTicker.LobbyBackground != null)
             {
-                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(_gameTicker.LobbyBackground );
-            }
-            else
-            {
-                Lobby!.Background.Texture = null;
+                Lobby!.Background.Texture = _resourceCache.GetResource<TextureResource>(_gameTicker.LobbyBackground.Background);
+
+                var lobbyBackground = _gameTicker.LobbyBackground;
+
+                var name = string.IsNullOrEmpty(lobbyBackground.Name)
+                    ? Loc.GetString("lobby-state-background-unknown-title")
+                    : lobbyBackground.Name;
+
+                var artist = string.IsNullOrEmpty(lobbyBackground.Artist)
+                    ? Loc.GetString("lobby-state-background-unknown-artist")
+                    : lobbyBackground.Artist;
+
+                var markup = Loc.GetString("lobby-state-background-text",
+                    ("backgroundName", name),
+                    ("backgroundArtist", artist));
+
+                Lobby!.LobbyBackground.SetMarkup(markup);
+
+                return;
             }
 
+            _sawmill.Warning("_gameTicker.LobbyBackground was null! No lobby background selected.");
+            Lobby!.Background.Texture = null;
+            Lobby!.LobbyBackground.SetMarkup(Loc.GetString("lobby-state-background-no-background-text"));
         }
 
         private void SetReady(bool newReady)

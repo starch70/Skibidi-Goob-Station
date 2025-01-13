@@ -47,15 +47,19 @@
                         <BoxContainer Orientation="Vertical" SeparationOverride="4" Name="VoteContainer"
                                       Access="Public" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0 8" />
                     </BoxContainer>
-                    <TextureRect Access="Public" Name="FUCKINGMARIAH" MaxHeight="25" />
                     <!-- Vertical Padding-->
                     <Control VerticalExpand="True" />
                     <!-- Left Bot Panel -->
-                    <BoxContainer Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                    <BoxContainer Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" SeparationOverride="4"> <!-- Goobstation - Lobby Background Credits -->
                         <info:DevInfoBanner Name="DevInfoBanner" VerticalExpand="false" Margin="3 3 3 3" />
                         <PanelContainer StyleClasses="AngleRect">
                             <RichTextLabel Name="LobbySong" Access="Public" HorizontalAlignment="Center" />
                         </PanelContainer>
+                        <!-- Goobstation start -->
+                        <PanelContainer StyleClasses="AngleRect">
+                            <RichTextLabel Name="LobbyBackground" Access="Public" HorizontalAlignment="Center" />
+                        </PanelContainer>
+                        <!-- Goobstation end -->
                     </BoxContainer>
                 </Control>
                 <!-- Character setup state -->

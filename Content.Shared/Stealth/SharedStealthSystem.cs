@@ -1,6 +1,5 @@
 using Content.Shared.Examine;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Systems;
 using Content.Shared.Stealth.Components;
 using Robust.Shared.GameStates;
 using Robust.Shared.Timing;
@@ -61,17 +60,21 @@ public abstract class SharedStealthSystem : EntitySystem
         Dirty(uid, component);
     }
 
-    private void OnMobStateChanged(EntityUid uid, StealthComponent component, MobStateChangedEvent args)
+
+    private void OnMobStateChanged(EntityUid uid, StealthComponent component, MobStateChangedEvent args)// Goobstation - Stealth change
     {
-        if (args.NewMobState == MobState.Dead)
+        if (args.NewMobState == MobState.Dead || args.NewMobState == MobState.Critical)
         {
-            component.Enabled = component.EnabledOnDeath;
+            if (args.NewMobState == MobState.Dead)
+                component.Enabled = component.EnabledOnDeath;
+            else
+                component.Enabled = component.EnabledOnCrit;
         }
         else
         {
             component.Enabled = true;
         }
-
+        SetEnabled(uid, component.Enabled, component);// to update the sprite;
         Dirty(uid, component);
     }
 
